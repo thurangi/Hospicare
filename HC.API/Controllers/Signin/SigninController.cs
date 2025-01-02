@@ -1,9 +1,10 @@
-﻿using HC.API.Model;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using HC_DataAccess.Models;
 using HC_DataAccess.Signin;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using System.Text.Json;
+using Microsoft.IdentityModel.Tokens;
 
 namespace HC.API.Controllers.Signin;
 
@@ -11,94 +12,27 @@ namespace HC.API.Controllers.Signin;
 [Route("api/[controller]")]
 public class SigninController : ControllerBase
 {
-    //private static List<Users> users =
-    //[
-    //    new Users
-    //    {
-    //        Username = "testuser",
-    //        Password = "testpassword"
-    //    }
-    //];
-    private readonly IConfiguration _configuration;
-    public SigninController(IConfiguration configuration)
+
+    private readonly GetUsersMain _getUsersMain;
+
+    public SigninController(GetUsersMain getUsersMain)
     {
-        _configuration = configuration;
+        _getUsersMain = getUsersMain;
     }
-
-
-#if false
-    [HttpPost("signin")]
-    public static Task<HttpResponseMessage> UserSignIn1(SigninModel signinModel)
+    [HttpPost("authenticate")]
+    public async Task<IActionResult> Authenticate([FromBody] SigninModel login)
     {
-        try
+        if (login is null)
         {
-            HttpResponseMessage responseMessage = new();
-            if (signinModel is null)
-            {
-
-                responseMessage = new()
-                {
-                    Content = new StringContent("Resource not found", Encoding.UTF8, "application/json"),
-                    StatusCode = System.Net.HttpStatusCode.NoContent
-                };
-            }
-            GetUsersMain getUsersMain = new();
-            string result = string.Empty;
-            getUsersMain.GetEntities(signinModel!, out result);
-
-            if (result != null)
-            {
-                responseMessage = new()
-                {
-                    Content = new StringContent(JsonSerializer.Serialize(result), Encoding.UTF8, "application/json"),
-                    StatusCode = System.Net.HttpStatusCode.OK
-                };
-            }
-            return Task.FromResult(responseMessage);
+            return NoContent();
         }
-        catch (Exception ex)
+        string result = string.Empty;
+        _getUsersMain.GetEntities(login, out result);
+        if (!string.IsNullOrEmpty(result) && result != "not success")
         {
-
-            throw;
+            return Ok(result);
         }
+        // Return Unauthorized if credentials are invalid
+        return Unauthorized("Invalid username or password.");
     }
-
-#endif
-
-
-
-    [HttpPost("signin")]
-    public async Task<IActionResult> UserSignIn([FromBody] SigninModel signinModel)
-    {
-        try
-        {
-            if (signinModel is null)
-            {
-                return NoContent();
-            }
-
-            GetUsersMain getUsersMain = new();
-            string result = string.Empty;
-            getUsersMain.GetEntities(signinModel, out result);
-            if (result == "not success")
-            {
-                // Return Unauthorized if credentials are invalid
-                return Unauthorized("Invalid username or password.");
-            }
-            if (!string.IsNullOrEmpty(result))
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return NotFound("Resource not found");
-            }
-        }
-        catch (Exception ex)
-        {
-            // Log the exception (optional)
-            return StatusCode(500, "Internal server error");
-        }
-    }
-
 }

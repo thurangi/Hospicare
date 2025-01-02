@@ -25,6 +25,8 @@ public partial class User
 
     public DateTime? LastLogin { get; set; }
 
+    public string? Gender { get; set; }
+
     public virtual Role? Role { get; set; }
 
     public virtual ICollection<UserPatient> UserPatients { get; set; } = new List<UserPatient>();
