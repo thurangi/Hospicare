@@ -1,10 +1,6 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using HC_DataAccess.Models;
+﻿using HC_DataAccess.Models;
 using HC_DataAccess.Signin;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace HC.API.Controllers.Signin;
 
