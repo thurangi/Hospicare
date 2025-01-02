@@ -1,5 +1,4 @@
 ﻿using HC.API.Model;
-using HC_DataAccess.Data;
 using HC_DataAccess.Models;
 using HC_DataAccess.Signin;
 using Microsoft.AspNetCore.Mvc;

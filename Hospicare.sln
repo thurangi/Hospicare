@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{507BAE55-D8D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HC.API", "HC.API\HC.API.csproj", "{D8C44FE4-7522-4E04-911D-900C293D42E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{391EAA0A-D00A-4CF7-AA70-DBBDB868ECBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HC.Web", "HC.Web\HC.Web.csproj", "{850132BD-7A0A-461E-A6F9-9B1605E38399}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,10 @@ Global
 		{D8C44FE4-7522-4E04-911D-900C293D42E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8C44FE4-7522-4E04-911D-900C293D42E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8C44FE4-7522-4E04-911D-900C293D42E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{850132BD-7A0A-461E-A6F9-9B1605E38399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{850132BD-7A0A-461E-A6F9-9B1605E38399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{850132BD-7A0A-461E-A6F9-9B1605E38399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{850132BD-7A0A-461E-A6F9-9B1605E38399}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +40,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{84E5C4E9-8B95-4EEF-8774-8CBC791FEF98} = {05B4335B-BF18-4F5A-809F-F483DF47BF29}
 		{D8C44FE4-7522-4E04-911D-900C293D42E9} = {507BAE55-D8D9-4C6C-BDD9-9B322031C931}
+		{850132BD-7A0A-461E-A6F9-9B1605E38399} = {391EAA0A-D00A-4CF7-AA70-DBBDB868ECBD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E7031FF-7609-4C0F-9053-E0BEE4C68F1C}
