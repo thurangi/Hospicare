@@ -1,4 +1,7 @@
-﻿namespace HC_DataAccess.Data;
+﻿using System;
+using System.Collections.Generic;
+
+namespace HC_DataAccess.Data;
 
 public partial class Medication
 {

@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HC_DataAccess.Data;
 
-public partial class HospicareDbContext : DbContext
+public partial class HCDbContext : DbContext
 {
-    public HospicareDbContext()
+    public HCDbContext()
     {
     }
 
-    public HospicareDbContext(DbContextOptions<HospicareDbContext> options)
+    public HCDbContext(DbContextOptions<HCDbContext> options)
         : base(options)
     {
     }
@@ -39,13 +39,13 @@ public partial class HospicareDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=HOME; Database=HospicareDB; Trusted_Connection=True; TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=GAYATRI-8210;Database=HospicareDB;Trusted_Connection=True;TrustServerCertificate=True;Integrated Security=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Allergy>(entity =>
         {
-            entity.HasKey(e => e.AllergyId).HasName("PK__Allergie__A49EBE62DFC45504");
+            entity.HasKey(e => e.AllergyId).HasName("PK__Allergie__A49EBE62E073CE97");
 
             entity.Property(e => e.AllergyId).HasColumnName("AllergyID");
             entity.Property(e => e.AllergyName).HasMaxLength(100);
@@ -55,12 +55,12 @@ public partial class HospicareDbContext : DbContext
 
             entity.HasOne(d => d.Patient).WithMany(p => p.Allergies)
                 .HasForeignKey(d => d.PatientId)
-                .HasConstraintName("FK__Allergies__Patie__49C3F6B7");
+                .HasConstraintName("FK__Allergies__Patie__5535A963");
         });
 
         modelBuilder.Entity<Appointment>(entity =>
         {
-            entity.HasKey(e => e.AppointmentId).HasName("PK__Appointm__8ECDFCA2AE88F96C");
+            entity.HasKey(e => e.AppointmentId).HasName("PK__Appointm__8ECDFCA23D3A1A27");
 
             entity.Property(e => e.AppointmentId).HasColumnName("AppointmentID");
             entity.Property(e => e.AppointmentDate).HasColumnType("datetime");
@@ -74,12 +74,12 @@ public partial class HospicareDbContext : DbContext
 
             entity.HasOne(d => d.Patient).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.PatientId)
-                .HasConstraintName("FK__Appointme__Patie__3E52440B");
+                .HasConstraintName("FK__Appointme__Patie__571DF1D5");
         });
 
         modelBuilder.Entity<Billing>(entity =>
         {
-            entity.HasKey(e => e.BillingId).HasName("PK__Billing__F1656D13AA4BF229");
+            entity.HasKey(e => e.BillingId).HasName("PK__Billing__F1656D1345E5D011");
 
             entity.ToTable("Billing");
 
@@ -97,16 +97,16 @@ public partial class HospicareDbContext : DbContext
 
             entity.HasOne(d => d.Appointment).WithMany(p => p.Billings)
                 .HasForeignKey(d => d.AppointmentId)
-                .HasConstraintName("FK__Billing__Appoint__4D94879B");
+                .HasConstraintName("FK__Billing__Appoint__5812160E");
 
             entity.HasOne(d => d.Patient).WithMany(p => p.Billings)
                 .HasForeignKey(d => d.PatientId)
-                .HasConstraintName("FK__Billing__Patient__4CA06362");
+                .HasConstraintName("FK__Billing__Patient__59063A47");
         });
 
         modelBuilder.Entity<InsuranceCoverage>(entity =>
         {
-            entity.HasKey(e => e.InsuranceId).HasName("PK__Insuranc__74231BC437EEE495");
+            entity.HasKey(e => e.InsuranceId).HasName("PK__Insuranc__74231BC4958FACF7");
 
             entity.ToTable("InsuranceCoverage");
 
@@ -120,12 +120,12 @@ public partial class HospicareDbContext : DbContext
 
             entity.HasOne(d => d.Patient).WithMany(p => p.InsuranceCoverages)
                 .HasForeignKey(d => d.PatientId)
-                .HasConstraintName("FK__Insurance__Patie__3B75D760");
+                .HasConstraintName("FK__Insurance__Patie__5AEE82B9");
         });
 
         modelBuilder.Entity<MedicalRecord>(entity =>
         {
-            entity.HasKey(e => e.RecordId).HasName("PK__MedicalR__FBDF78C9C548928E");
+            entity.HasKey(e => e.RecordId).HasName("PK__MedicalR__FBDF78C97F918F78");
 
             entity.Property(e => e.RecordId).HasColumnName("RecordID");
             entity.Property(e => e.Allergies).HasMaxLength(255);
@@ -141,16 +141,16 @@ public partial class HospicareDbContext : DbContext
 
             entity.HasOne(d => d.Patient).WithMany(p => p.MedicalRecords)
                 .HasForeignKey(d => d.PatientId)
-                .HasConstraintName("FK__MedicalRe__Patie__4222D4EF");
+                .HasConstraintName("FK__MedicalRe__Patie__5CD6CB2B");
 
             entity.HasOne(d => d.Visit).WithMany(p => p.MedicalRecords)
                 .HasForeignKey(d => d.VisitId)
-                .HasConstraintName("FK__MedicalRe__Visit__4316F928");
+                .HasConstraintName("FK__MedicalRe__Visit__5DCAEF64");
         });
 
         modelBuilder.Entity<Medication>(entity =>
         {
-            entity.HasKey(e => e.MedicationId).HasName("PK__Medicati__62EC1ADA91EECD9A");
+            entity.HasKey(e => e.MedicationId).HasName("PK__Medicati__62EC1ADAFB220C46");
 
             entity.Property(e => e.MedicationId).HasColumnName("MedicationID");
             entity.Property(e => e.Dosage).HasMaxLength(50);
@@ -160,12 +160,12 @@ public partial class HospicareDbContext : DbContext
 
             entity.HasOne(d => d.Record).WithMany(p => p.Medications)
                 .HasForeignKey(d => d.RecordId)
-                .HasConstraintName("FK__Medicatio__Recor__46E78A0C");
+                .HasConstraintName("FK__Medicatio__Recor__5FB337D6");
         });
 
         modelBuilder.Entity<Patient>(entity =>
         {
-            entity.HasKey(e => e.PatientId).HasName("PK__Patients__970EC3463A3F1ED3");
+            entity.HasKey(e => e.PatientId).HasName("PK__Patients__970EC346EE475D3A");
 
             entity.Property(e => e.PatientId).HasColumnName("PatientID");
             entity.Property(e => e.Address).HasMaxLength(255);
@@ -184,7 +184,7 @@ public partial class HospicareDbContext : DbContext
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A58A99581A2");
+            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A58B9AE7A44");
 
             entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
             entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
@@ -200,18 +200,18 @@ public partial class HospicareDbContext : DbContext
 
             entity.HasOne(d => d.Billing).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.BillingId)
-                .HasConstraintName("FK__Payments__Billin__5165187F");
+                .HasConstraintName("FK__Payments__Billin__619B8048");
 
             entity.HasOne(d => d.Patient).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.PatientId)
-                .HasConstraintName("FK__Payments__Patien__52593CB8");
+                .HasConstraintName("FK__Payments__Patien__628FA481");
         });
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Roles__8AFACE3A5900D018");
+            entity.HasKey(e => e.RoleId).HasName("PK__Roles__8AFACE3AC278051B");
 
-            entity.HasIndex(e => e.RoleName, "UQ__Roles__8A2B6160522F1F79").IsUnique();
+            entity.HasIndex(e => e.RoleName, "UQ__Roles__8A2B6160BE42C88E").IsUnique();
 
             entity.Property(e => e.RoleId).HasColumnName("RoleID");
             entity.Property(e => e.Description).HasMaxLength(255);
@@ -220,9 +220,9 @@ public partial class HospicareDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC9C37F00C");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC3111C2C9");
 
-            entity.HasIndex(e => e.Username, "UQ__Users__536C85E40301E792").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Users__536C85E4ED3E1CF3").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.CreatedDate)
@@ -230,6 +230,9 @@ public partial class HospicareDbContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.FullName).HasMaxLength(100);
+            entity.Property(e => e.Gender)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.LastLogin).HasColumnType("datetime");
             entity.Property(e => e.PasswordHash).HasMaxLength(255);
@@ -244,7 +247,7 @@ public partial class HospicareDbContext : DbContext
 
         modelBuilder.Entity<UserPatient>(entity =>
         {
-            entity.HasKey(e => e.UserPatientId).HasName("PK__UserPati__A5147BCA52100289");
+            entity.HasKey(e => e.UserPatientId).HasName("PK__UserPati__A5147BCAA816635D");
 
             entity.ToTable("UserPatient");
 
@@ -257,11 +260,11 @@ public partial class HospicareDbContext : DbContext
 
             entity.HasOne(d => d.Patient).WithMany(p => p.UserPatients)
                 .HasForeignKey(d => d.PatientId)
-                .HasConstraintName("FK__UserPatie__Patie__619B8048");
+                .HasConstraintName("FK__UserPatie__Patie__6477ECF3");
 
             entity.HasOne(d => d.User).WithMany(p => p.UserPatients)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__UserPatie__UserI__60A75C0F");
+                .HasConstraintName("FK__UserPatie__UserI__656C112C");
         });
 
         OnModelCreatingPartial(modelBuilder);
