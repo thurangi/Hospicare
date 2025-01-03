@@ -13,8 +13,6 @@ public partial class User
 
     public int? RoleId { get; set; }
 
-    public string FullName { get; set; } = null!;
-
     public string? Email { get; set; }
 
     public string? PhoneNumber { get; set; }
@@ -27,7 +25,15 @@ public partial class User
 
     public string? Gender { get; set; }
 
-    public virtual Role? Role { get; set; }
+    public string? FirstName { get; set; }
+
+    public string? LastName { get; set; }
+
+    public DateOnly? Dob { get; set; }
+
+    public virtual ICollection<Patient> Patients { get; set; } = new List<Patient>();
 
     public virtual ICollection<UserPatient> UserPatients { get; set; } = new List<UserPatient>();
+
+    public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
 }

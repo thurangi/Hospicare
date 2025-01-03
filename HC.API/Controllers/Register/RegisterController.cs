@@ -1,5 +1,5 @@
 ﻿using HC_DataAccess.Models;
-using HC_DataAccess.Signin;
+using HC_DataAccess.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HC.API.Controllers.Register
@@ -8,16 +8,16 @@ namespace HC.API.Controllers.Register
     [Route("api/[controller]")]
     public class RegisterController : ControllerBase
     {
-        private readonly RegisterUserMain _registerUser;
+        private readonly UserServices _userServices;
 
-        public RegisterController(RegisterUserMain registerUser)
+        public RegisterController(UserServices userServices)
         {
-            _registerUser = registerUser;
+            _userServices = userServices;
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var user = await _registerUser.RegisterUserAsync(model);
+            var user = await _userServices.RegisterUserAsync(model);
 
             if (user == null)
             {
