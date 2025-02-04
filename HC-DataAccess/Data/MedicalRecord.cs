@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HC_DataAccess.Data;
 
-public partial class UserRoles
+public partial class MedicalRecord
 {
     public int RecordId { get; set; }
 

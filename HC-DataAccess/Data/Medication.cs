@@ -19,5 +19,5 @@ public partial class Medication
 
     public DateOnly? EndDate { get; set; }
 
-    public virtual UserRoles? Record { get; set; }
+    public virtual MedicalRecord? Record { get; set; }
 }

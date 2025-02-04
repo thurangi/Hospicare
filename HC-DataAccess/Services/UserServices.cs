@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using HC_DataAccess.Data;
 using HC_DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -79,4 +80,9 @@ public class UserServices
         await _hCDbContext.SaveChangesAsync();
         return user;
     }
+    public async Task<List<Role>> GetAllRolesAsync()
+    {
+        return await _hCDbContext.Roles.ToListAsync();
+    }
+
 }

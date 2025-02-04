@@ -35,7 +35,7 @@ public partial class Patient
 
     public virtual ICollection<InsuranceCoverage> InsuranceCoverages { get; set; } = new List<InsuranceCoverage>();
 
-    public virtual ICollection<UserRoles> MedicalRecords { get; set; } = new List<UserRoles>();
+    public virtual ICollection<MedicalRecord> MedicalRecords { get; set; } = new List<MedicalRecord>();
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 

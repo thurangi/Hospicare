@@ -21,9 +21,11 @@ public partial class HCDbContext : DbContext
 
     public virtual DbSet<Billing> Billings { get; set; }
 
+    public virtual DbSet<DummyProduct> DummyProducts { get; set; }
+
     public virtual DbSet<InsuranceCoverage> InsuranceCoverages { get; set; }
 
-    public virtual DbSet<UserRoles> MedicalRecords { get; set; }
+    public virtual DbSet<MedicalRecord> MedicalRecords { get; set; }
 
     public virtual DbSet<Medication> Medications { get; set; }
 
@@ -37,11 +39,11 @@ public partial class HCDbContext : DbContext
 
     public virtual DbSet<UserPatient> UserPatients { get; set; }
 
-    public virtual DbSet<UserRoles> UserRoles { get; set; }
+    public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=GAYATRI-8210;Database=HospicareDB;Trusted_Connection=True;TrustServerCertificate=True;Integrated Security=True;");
+        => optionsBuilder.UseSqlServer("Server=GAYATRI-8210;Database=HospicareDB;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -106,6 +108,16 @@ public partial class HCDbContext : DbContext
                 .HasConstraintName("FK__Billing__Patient__59063A47");
         });
 
+        modelBuilder.Entity<DummyProduct>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__dummy_Pr__3214EC07DCF5DD56");
+
+            entity.ToTable("dummy_Products");
+
+            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+        });
+
         modelBuilder.Entity<InsuranceCoverage>(entity =>
         {
             entity.HasKey(e => e.InsuranceId).HasName("PK__Insuranc__74231BC4958FACF7");
@@ -125,7 +137,7 @@ public partial class HCDbContext : DbContext
                 .HasConstraintName("FK__Insurance__Patie__5AEE82B9");
         });
 
-        modelBuilder.Entity<UserRoles>(entity =>
+        modelBuilder.Entity<MedicalRecord>(entity =>
         {
             entity.HasKey(e => e.RecordId).HasName("PK__MedicalR__FBDF78C97F918F78");
 
@@ -262,23 +274,6 @@ public partial class HCDbContext : DbContext
             entity.Property(e => e.PhoneNumber).HasMaxLength(15);
             entity.Property(e => e.RoleId).HasColumnName("RoleID");
             entity.Property(e => e.Username).HasMaxLength(100);
-
-            entity.HasMany(d => d.Roles).WithMany(p => p.Users)
-                .UsingEntity<Dictionary<string, object>>(
-                    "UserRole",
-                    r => r.HasOne<Role>().WithMany()
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("FK__UserRoles__RoleI__01142BA1"),
-                    l => l.HasOne<User>().WithMany()
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK__UserRoles__UserI__00200768"),
-                    j =>
-                    {
-                        j.HasKey("UserId", "RoleId").HasName("PK__UserRole__AF27604FE14FEE30");
-                        j.ToTable("UserRoles");
-                        j.IndexerProperty<int>("UserId").HasColumnName("UserID");
-                        j.IndexerProperty<int>("RoleId").HasColumnName("RoleID");
-                    });
         });
 
         modelBuilder.Entity<UserPatient>(entity =>
@@ -301,6 +296,24 @@ public partial class HCDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.UserPatients)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__UserPatie__UserI__656C112C");
+        });
+
+        modelBuilder.Entity<UserRole>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.RoleId }).HasName("PK__UserRole__AF27604FE14FEE30");
+
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.RoleId).HasColumnName("RoleID");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.UserRoles)
+                .HasForeignKey(d => d.RoleId)
+                .HasConstraintName("FK__UserRoles__RoleI__01142BA1");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserRoles)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__UserRoles__UserI__00200768");
         });
 
         OnModelCreatingPartial(modelBuilder);

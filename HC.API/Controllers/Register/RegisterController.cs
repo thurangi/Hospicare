@@ -1,4 +1,5 @@
-﻿using HC_DataAccess.Models;
+﻿using HC_DataAccess.Data;
+using HC_DataAccess.Models;
 using HC_DataAccess.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,14 @@ namespace HC.API.Controllers.Register
                 return BadRequest("User is already taken.");
             }
             return Ok(new { message = "User registered successfully" });
+        }
+
+
+        [HttpGet("roles")]
+        public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
+        {
+            var  role = await _userServices.GetAllRolesAsync();
+            return Ok(role);
         }
     }
 }
