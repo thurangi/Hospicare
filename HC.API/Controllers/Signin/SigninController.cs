@@ -1,10 +1,6 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using HC_DataAccess.Models;
-using HC_DataAccess.Signin;
+﻿using HC_DataAccess.Models;
+using HC_DataAccess.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace HC.API.Controllers.Signin;
 
@@ -13,11 +9,11 @@ namespace HC.API.Controllers.Signin;
 public class SigninController : ControllerBase
 {
 
-    private readonly GetUsersMain _getUsersMain;
+    private readonly UserServices _userServices;
 
-    public SigninController(GetUsersMain getUsersMain)
+    public SigninController(UserServices userServices)
     {
-        _getUsersMain = getUsersMain;
+        _userServices = userServices;
     }
     [HttpPost("authenticate")]
     public async Task<IActionResult> Authenticate([FromBody] SigninModel login)
@@ -27,7 +23,7 @@ public class SigninController : ControllerBase
             return NoContent();
         }
         string result = string.Empty;
-        _getUsersMain.GetEntities(login, out result);
+        _userServices.GetEntities(login, out result);
         if (!string.IsNullOrEmpty(result) && result != "not success")
         {
             return Ok(result);

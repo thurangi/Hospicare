@@ -7,27 +7,25 @@ public partial class Patient
 {
     public int PatientId { get; set; }
 
-    public string FullName { get; set; } = null!;
-
-    public DateOnly DateOfBirth { get; set; }
-
-    public string Gender { get; set; } = null!;
-
-    public string PhoneNumber { get; set; } = null!;
-
-    public string? Email { get; set; }
-
-    public string? Address { get; set; }
-
-    public string? City { get; set; }
-
-    public string? State { get; set; }
-
-    public string? PostalCode { get; set; }
-
     public bool? HasInsurance { get; set; }
 
     public DateTime? CreatedDate { get; set; }
+
+    public int? UserId { get; set; }
+
+    public string? Diagnosis { get; set; }
+
+    public string? EmergencyContact { get; set; }
+
+    public string? InsuranceProvider { get; set; }
+
+    public string? PolicyNumber { get; set; }
+
+    public string? InsuranceNumber { get; set; }
+
+    public DateTime? AdmissionDate { get; set; }
+
+    public DateTime? DischargeDate { get; set; }
 
     public virtual ICollection<Allergy> Allergies { get; set; } = new List<Allergy>();
 
@@ -40,6 +38,8 @@ public partial class Patient
     public virtual ICollection<MedicalRecord> MedicalRecords { get; set; } = new List<MedicalRecord>();
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
+    public virtual User? User { get; set; }
 
     public virtual ICollection<UserPatient> UserPatients { get; set; } = new List<UserPatient>();
 }

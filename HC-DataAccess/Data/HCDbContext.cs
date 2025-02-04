@@ -21,6 +21,8 @@ public partial class HCDbContext : DbContext
 
     public virtual DbSet<Billing> Billings { get; set; }
 
+    public virtual DbSet<DummyProduct> DummyProducts { get; set; }
+
     public virtual DbSet<InsuranceCoverage> InsuranceCoverages { get; set; }
 
     public virtual DbSet<MedicalRecord> MedicalRecords { get; set; }
@@ -37,9 +39,11 @@ public partial class HCDbContext : DbContext
 
     public virtual DbSet<UserPatient> UserPatients { get; set; }
 
+    public virtual DbSet<UserRole> UserRoles { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=GAYATRI-8210;Database=HospicareDB;Trusted_Connection=True;TrustServerCertificate=True;Integrated Security=True;");
+        => optionsBuilder.UseSqlServer("Server=GAYATRI-8210;Database=HospicareDB;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -102,6 +106,16 @@ public partial class HCDbContext : DbContext
             entity.HasOne(d => d.Patient).WithMany(p => p.Billings)
                 .HasForeignKey(d => d.PatientId)
                 .HasConstraintName("FK__Billing__Patient__59063A47");
+        });
+
+        modelBuilder.Entity<DummyProduct>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__dummy_Pr__3214EC07DCF5DD56");
+
+            entity.ToTable("dummy_Products");
+
+            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
         });
 
         modelBuilder.Entity<InsuranceCoverage>(entity =>
@@ -168,18 +182,33 @@ public partial class HCDbContext : DbContext
             entity.HasKey(e => e.PatientId).HasName("PK__Patients__970EC346EE475D3A");
 
             entity.Property(e => e.PatientId).HasColumnName("PatientID");
-            entity.Property(e => e.Address).HasMaxLength(255);
-            entity.Property(e => e.City).HasMaxLength(50);
+            entity.Property(e => e.AdmissionDate).HasColumnType("datetime");
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.FullName).HasMaxLength(100);
-            entity.Property(e => e.Gender).HasMaxLength(10);
+            entity.Property(e => e.Diagnosis)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.DischargeDate).HasColumnType("datetime");
+            entity.Property(e => e.EmergencyContact)
+                .HasMaxLength(100)
+                .IsUnicode(false);
             entity.Property(e => e.HasInsurance).HasDefaultValue(false);
-            entity.Property(e => e.PhoneNumber).HasMaxLength(15);
-            entity.Property(e => e.PostalCode).HasMaxLength(20);
-            entity.Property(e => e.State).HasMaxLength(50);
+            entity.Property(e => e.InsuranceNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.InsuranceProvider)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.PolicyNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Patients)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__Patients__UserID__7D439ABD");
         });
 
         modelBuilder.Entity<Payment>(entity =>
@@ -228,21 +257,23 @@ public partial class HCDbContext : DbContext
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.Dob).HasColumnName("DOB");
             entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.FullName).HasMaxLength(100);
+            entity.Property(e => e.FirstName)
+                .HasMaxLength(255)
+                .IsUnicode(false);
             entity.Property(e => e.Gender)
                 .HasMaxLength(10)
                 .IsUnicode(false);
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.LastLogin).HasColumnType("datetime");
+            entity.Property(e => e.LastName)
+                .HasMaxLength(255)
+                .IsUnicode(false);
             entity.Property(e => e.PasswordHash).HasMaxLength(255);
             entity.Property(e => e.PhoneNumber).HasMaxLength(15);
             entity.Property(e => e.RoleId).HasColumnName("RoleID");
             entity.Property(e => e.Username).HasMaxLength(100);
-
-            entity.HasOne(d => d.Role).WithMany(p => p.Users)
-                .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("RoleID");
         });
 
         modelBuilder.Entity<UserPatient>(entity =>
@@ -265,6 +296,24 @@ public partial class HCDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.UserPatients)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__UserPatie__UserI__656C112C");
+        });
+
+        modelBuilder.Entity<UserRole>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.RoleId }).HasName("PK__UserRole__AF27604FE14FEE30");
+
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.RoleId).HasColumnName("RoleID");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.UserRoles)
+                .HasForeignKey(d => d.RoleId)
+                .HasConstraintName("FK__UserRoles__RoleI__01142BA1");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserRoles)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__UserRoles__UserI__00200768");
         });
 
         OnModelCreatingPartial(modelBuilder);
