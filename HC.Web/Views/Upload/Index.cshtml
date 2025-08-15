@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Upload Word Document";
+}
+
+<h2>Upload Word Document</h2>
+
+<form asp-action="Upload" asp-controller="Document" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <input type="submit" value="Upload" />
+</form>
+
+@if (ViewBag.DocumentContent != null)
+{
+    <h3>Document Content:</h3>
+    <textarea rows="20" cols="100">@ViewBag.DocumentContent</textarea>
+}

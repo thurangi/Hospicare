@@ -21,6 +21,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Signin}/{action=Index}/{id?}");
+    pattern: "{controller=Upload}/{action=Index}/{id?}");
 
 app.Run();

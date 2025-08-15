@@ -22,8 +22,7 @@ public class SigninController : ControllerBase
         {
             return NoContent();
         }
-        string result = string.Empty;
-        _userServices.GetEntities(login, out result);
+        _userServices.GetEntities(login, out string? result);
         if (!string.IsNullOrEmpty(result) && result != "not success")
         {
             return Ok(result);

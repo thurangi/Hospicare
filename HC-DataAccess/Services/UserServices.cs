@@ -13,7 +13,6 @@ public class UserServices
 {
     private readonly IConfiguration _configuration;
     private readonly HCDbContext _hCDbContext;
-
     public UserServices(IConfiguration configuration, HCDbContext hCDbContext)
     {
         _configuration = configuration;
@@ -43,7 +42,7 @@ public class UserServices
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
