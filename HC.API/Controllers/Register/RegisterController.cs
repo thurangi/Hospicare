@@ -18,6 +18,7 @@ namespace HC.API.Controllers.Register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
+            //TODO: Validate the register model (e.g., check for null or empty fields, password match, etc.)
             var user = await _userServices.RegisterUserAsync(model);
 
             if (user == null)
