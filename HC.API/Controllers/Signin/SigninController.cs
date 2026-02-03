@@ -22,6 +22,7 @@ public class SigninController : ControllerBase
         {
             return NoContent();
         }
+        //TODO: Validate the login model (e.g., check for null or empty username/password)
         _userServices.GetEntities(login, out string? result);
         if (!string.IsNullOrEmpty(result) && result != "not success")
         {
